@@ -17,6 +17,7 @@ restPlugin.onInit = params => {
         DOCPORT: params.options['rest-docport'],
         PROTOCOL: params.options['rest-protocol'],
         EXECMODE: params.options['rest-execmode'],
+        CN: params.options['rest-cn'],
         RPCCOMMANDS: params.options['rest-rpc'].trim().split(",").map(s => s.trim()),
         PLUGIN: restPlugin
     }
