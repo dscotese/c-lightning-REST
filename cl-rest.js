@@ -5,6 +5,7 @@ fs = require( 'fs' );
 var PORT = 3001;
 var DOCPORT = 4001;
 var EXECMODE = "production";
+var CN = "localhost";
 
 const { execSync } = require( 'child_process' );
 const execOptions = { encoding: 'utf-8', windowsHide: true };
@@ -36,7 +37,7 @@ if (typeof global.REST_PLUGIN_CONFIG === 'undefined') {
 }
 global.logger.log('--- Starting the cl-rest server ---');
 
-if (!config.PORT || !config.DOCPORT || !config.PROTOCOL || !config.EXECMODE)
+if (!config.PORT || !config.DOCPORT || !config.PROTOCOL || !config.EXECMODE || !config.CN)
 {
     global.logger.warn("Incomplete config params");
     process.exit(1);
@@ -46,6 +47,7 @@ if (!config.PORT || !config.DOCPORT || !config.PROTOCOL || !config.EXECMODE)
 PORT = config.PORT;
 EXECMODE = config.EXECMODE;
 DOCPORT = config.DOCPORT;
+CN = config.CN;
 
 //Create certs folder
 try {
@@ -62,7 +64,7 @@ if ( ! fs.existsSync( key ) || ! fs.existsSync( certificate ) ) {
     try {
         execSync( 'openssl version', execOptions );
         execSync(
-            `openssl req -x509 -newkey rsa:2048 -keyout ./certs/key.tmp.pem -out ${ certificate } -days 365 -nodes -subj "/C=US/ST=Foo/L=Bar/O=Baz/CN=localhost"`,
+            `openssl req -x509 -newkey rsa:2048 -keyout ./certs/key.tmp.pem -out ${ certificate } -days 365 -nodes -subj "/C=US/ST=Foo/L=Bar/O=Baz/CN=${ CN }"`,
             execOptions
         );
         execSync( `openssl rsa -in ./certs/key.tmp.pem -out ${ key }`, execOptions );
